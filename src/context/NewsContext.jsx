@@ -7,7 +7,7 @@ const NewsContext = createContext();
 export function NewsProvider({ children }) {
   const [news, setNews] = useState([]);
   const [category, setCategory] = useState("general");
-  const [searchQuery, setSearchQuery] = useState(""); // ✅ Add this state
+  const [searchQuery, setSearchQuery] = useState("");  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -32,7 +32,7 @@ export function NewsProvider({ children }) {
 
   useEffect(() => {
     fetchNews(category, searchQuery);
-  }, [category, searchQuery]); // ✅ Listen for changes in searchQuery
+  }, [category, searchQuery]); //  
 
   return (
     <NewsContext.Provider value={{ news, category, setCategory, searchQuery, setSearchQuery, fetchNews, loading, error }}>

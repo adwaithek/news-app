@@ -27,7 +27,7 @@ export default function NewsCard({ article }) {
       <h2 className="text-lg font-bold mt-2">{article.title}</h2>
       <p className="text-sm">{article.description}</p>
 
-      {/* Save selected article before redirecting */}
+ 
       <Link href={`/article/${slug}`} className="text-blue-500 mt-2 inline-block" onClick={handleArticleClick}>
         Read More
       </Link>

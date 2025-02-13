@@ -59,7 +59,7 @@ export default function NewsList() {
 
   return (
     <div className="p-4">
-      {/* Show dynamic category name */}
+      {/*   dynamic category name */}
       <h2 className="text-2xl font-bold mb-4">
         {searchQuery ? `Search Results for "${searchQuery}"` : `${formattedCategory} News`}
       </h2>

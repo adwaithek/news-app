@@ -8,13 +8,13 @@ export default function RootLayout({ children }) {
   const [darkMode, setDarkMode] = useState(false);
 
   // Load saved theme from localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem("theme");
+  //   if (savedTheme === "dark") {
+  //     setDarkMode(true);
+  //     document.documentElement.classList.add("dark");
+  //   }
+  // }, []);
 
   return (
     <html lang="en">

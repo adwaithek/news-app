@@ -1,14 +1,11 @@
 "use client";
+import { useEffect } from "react";
 import { useNews } from "@/context/NewsContext";
 import SearchBar from "@/components/SearchBar";
-import { useRouter } from "next/navigation";
+import Categories from "@/components/Categories";
 import { Moon, Sun } from "lucide-react";
 
 export default function Navbar({ darkMode, setDarkMode }) {
-  const { setCategory } = useNews();
-  const router = useRouter();
-  const categories = ["general", "business", "technology", "sports", "entertainment"];
-
   // Toggle Dark Mode
   const toggleDarkMode = () => {
     const newMode = !darkMode;
@@ -23,27 +20,29 @@ export default function Navbar({ darkMode, setDarkMode }) {
   };
 
   return (
-    <nav className="flex flex-col sm:flex-row justify-between items-center border-b-2 border-black bg-white text-black dark:bg-gray-900 dark:text-white container mx-auto p-4 transition-colors duration-300">
-      <SearchBar />
-      
-      <div className="flex gap-4 overflow-x-auto sm:overflow-visible whitespace-nowrap scrollbar-hide sm:flex-wrap mt-4 sm:mt-0">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className="px-3 py-1 text-sm sm:text-base hover:underline flex-shrink-0"
-            onClick={() => {
-              setCategory(cat);
-              router.push("/");
-            }}
-          >
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </button>
-        ))}
+    <nav className="border-b-2 border-black bg-white text-black dark:bg-gray-900 dark:text-white container mx-auto p-4 transition-colors duration-300">
+   
+      <div className="flex justify-between items-center sm:hidden">
+        <SearchBar />
+        <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-300 dark:bg-gray-700 ms-3">
+          {darkMode ? <Sun className="text-yellow-400" /> : <Moon className="text-gray-900" />}
+        </button>
       </div>
 
-      <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-300 dark:bg-gray-700">
-        {darkMode ? <Sun className="text-yellow-400" /> : <Moon className="text-gray-900" />}
-      </button>
+     
+      <div className="flex justify-center sm:hidden mt-3">
+        <Categories />
+      </div>
+
+      <div className="hidden sm:flex justify-between items-center">
+        <Categories />
+        <div className="flex items-center gap-4">
+          <SearchBar />
+          <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-300 dark:bg-gray-700">
+            {darkMode ? <Sun className="text-yellow-400" /> : <Moon className="text-gray-900" />}
+          </button>
+        </div>
+      </div>
     </nav>
   );
 }
