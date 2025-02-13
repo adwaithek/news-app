@@ -17,8 +17,8 @@ export default function Categories() {
             category === cat ? "font-bold underline" : ""
           }`}
           onClick={() => {
-            setCategory(cat); // ✅ Update category state
-            router.push("/"); // ✅ Ensure UI updates
+            setCategory(cat);  
+            router.push("/"); 
           }}
         >
           {cat}

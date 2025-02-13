@@ -24,7 +24,7 @@ export default function NewsList() {
 
       const response = await axios.get(url);
 
-      // ✅ Append new articles only if page > 1, otherwise reset
+      
       setArticles((prev) => (page === 1 ? response.data.articles : [...prev, ...response.data.articles]));
       
       setHasMore(response.data.articles.length > 0);
@@ -36,11 +36,11 @@ export default function NewsList() {
     }
   };
 
-  // ✅ Reset when category or search query changes
+ 
   useEffect(() => {
-    setArticles([]); // ✅ Clear old articles
-    setPage(1); // ✅ Reset pagination
-    setHasMore(true); // ✅ Reset hasMore flag
+    setArticles([]);  
+    setPage(1);  
+    setHasMore(true);  
   }, [category, searchQuery]);
 
   useEffect(() => {

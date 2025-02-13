@@ -9,7 +9,7 @@ export function NewsProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchNews(category); // ✅ Fetch news whenever the category changes
+    fetchNews(category); 
   }, [category]);
 
   const fetchNews = async (selectedCategory) => {
@@ -28,7 +28,7 @@ export function NewsProvider({ children }) {
       }
 
       const data = await response.json();
-      setNews(data.articles); // ✅ Update news state
+      setNews(data.articles);  
     } catch (error) {
       console.error("Error fetching news:", error.message);
     }
