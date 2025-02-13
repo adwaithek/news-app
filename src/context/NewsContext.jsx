@@ -5,38 +5,37 @@ import axios from "axios";
 const NewsContext = createContext();
 
 export function NewsProvider({ children }) {
-  const [category, setCategory] = useState("general");
-  const [searchQuery, setSearchQuery] = useState(""); // Ensure this is defined
   const [news, setNews] = useState([]);
+  const [category, setCategory] = useState("general");
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Add this state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchNews = async () => {
+  const fetchNews = async (selectedCategory, query = "") => {
     setLoading(true);
     setError(null);
     try {
       const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
-      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`;
-
-      if (searchQuery) {
-        url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${API_KEY}`;
-      }
+      const url = query
+        ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
+        : `https://newsapi.org/v2/top-headlines?category=${selectedCategory}&country=us&apiKey=${API_KEY}`;
 
       const response = await axios.get(url);
-      setNews(response.data.articles || []);
+      setNews(response.data.articles);
     } catch (err) {
-      setError("Failed to fetch news. Please try again.");
+      console.error("Error fetching news:", err);
+      setError(err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchNews();
-  }, [category, searchQuery]);
+    fetchNews(category, searchQuery);
+  }, [category, searchQuery]); // ✅ Listen for changes in searchQuery
 
   return (
-    <NewsContext.Provider value={{ category, setCategory, searchQuery, setSearchQuery, news, loading, error }}>
+    <NewsContext.Provider value={{ news, category, setCategory, searchQuery, setSearchQuery, fetchNews, loading, error }}>
       {children}
     </NewsContext.Provider>
   );

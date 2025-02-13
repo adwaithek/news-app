@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNews } from "@/context/NewsContext";
 import axios from "axios";
+import NewsCard from "./NewsCard";
 
 export default function NewsList() {
   const { category, searchQuery } = useNews();
@@ -24,6 +25,8 @@ export default function NewsList() {
       const response = await axios.get(url);
       setArticles((prev) => [...prev, ...response.data.articles]);
       setHasMore(response.data.articles.length > 0);
+      console.log(articles);
+      
     } catch (error) {
       console.error("Error fetching news:", error);
     } finally {
@@ -63,18 +66,7 @@ export default function NewsList() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {articles.map((article, index) => (
-          <div key={index} className="border p-4 rounded-lg shadow-md">
-            <img
-              src={article.urlToImage || "/default-news.jpg"}
-              alt={article.title}
-              className="w-full h-40 object-cover rounded"
-            />
-            <h3 className="font-semibold mt-2">{article.title}</h3>
-            <p className="text-sm text-gray-600">{article.source.name}</p>
-            <a href={article.url} target="_blank" className="text-blue-500 mt-2 block">
-              Read More
-            </a>
-          </div>
+          <NewsCard key={index} article={article} />
         ))}
       </div>
 

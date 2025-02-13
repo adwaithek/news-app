@@ -1,9 +1,17 @@
+"use client";
 import Link from "next/link";
 
 export default function NewsCard({ article }) {
+  const slug = encodeURIComponent(article.title);
+
+  const handleArticleClick = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedArticle", JSON.stringify(article));
+    }
+  };
+
   return (
     <div className="border p-4 rounded-lg shadow-lg">
-      {/* Only render image if article.urlToImage exists */}
       {article.urlToImage ? (
         <img
           src={article.urlToImage}
@@ -18,7 +26,9 @@ export default function NewsCard({ article }) {
 
       <h2 className="text-lg font-bold mt-2">{article.title}</h2>
       <p className="text-sm">{article.description}</p>
-      <Link href={article.url} className="text-blue-500 mt-2 inline-block">
+
+      {/* Save selected article before redirecting */}
+      <Link href={`/article/${slug}`} className="text-blue-500 mt-2 inline-block" onClick={handleArticleClick}>
         Read More
       </Link>
     </div>
