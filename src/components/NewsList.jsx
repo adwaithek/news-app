@@ -23,9 +23,11 @@ export default function NewsList() {
         : `https://newsapi.org/v2/top-headlines?country=us&category=${category}&page=${page}&pageSize=10&apiKey=${API_KEY}`;
 
       const response = await axios.get(url);
-      setArticles((prev) => [...prev, ...response.data.articles]);
+
+      // ✅ Append new articles only if page > 1, otherwise reset
+      setArticles((prev) => (page === 1 ? response.data.articles : [...prev, ...response.data.articles]));
+      
       setHasMore(response.data.articles.length > 0);
-      console.log(articles);
       
     } catch (error) {
       console.error("Error fetching news:", error);
@@ -33,6 +35,13 @@ export default function NewsList() {
       setLoading(false);
     }
   };
+
+  // ✅ Reset when category or search query changes
+  useEffect(() => {
+    setArticles([]); // ✅ Clear old articles
+    setPage(1); // ✅ Reset pagination
+    setHasMore(true); // ✅ Reset hasMore flag
+  }, [category, searchQuery]);
 
   useEffect(() => {
     fetchNews();
@@ -53,13 +62,10 @@ export default function NewsList() {
     return () => observer.disconnect();
   }, [loading, hasMore]);
 
-  // Capitalize first letter of category name
-  const formattedCategory =
-    category.charAt(0).toUpperCase() + category.slice(1);
+  const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
   return (
     <div className="p-4">
-      {/*   dynamic category name */}
       <h2 className="text-2xl font-bold mb-4">
         {searchQuery ? `Search Results for "${searchQuery}"` : `${formattedCategory} News`}
       </h2>

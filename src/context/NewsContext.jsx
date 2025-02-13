@@ -1,43 +1,43 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 
 const NewsContext = createContext();
 
 export function NewsProvider({ children }) {
   const [news, setNews] = useState([]);
   const [category, setCategory] = useState("general");
-  const [searchQuery, setSearchQuery] = useState("");  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchNews = async (selectedCategory, query = "") => {
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    fetchNews(category); // ✅ Fetch news whenever the category changes
+  }, [category]);
+
+  const fetchNews = async (selectedCategory) => {
     try {
-      const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
-      const url = query
-        ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
-        : `https://newsapi.org/v2/top-headlines?category=${selectedCategory}&country=us&apiKey=${API_KEY}`;
+      const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY;
+      if (!apiKey) {
+        throw new Error("API Key is missing. Set it in .env.local");
+      }
 
-      const response = await axios.get(url);
-      setNews(response.data.articles);
-    } catch (err) {
-      console.error("Error fetching news:", err);
-      setError(err);
-    } finally {
-      setLoading(false);
+      const response = await fetch(
+        `https://newsapi.org/v2/top-headlines?category=${selectedCategory}&country=us&apiKey=${apiKey}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setNews(data.articles); // ✅ Update news state
+    } catch (error) {
+      console.error("Error fetching news:", error.message);
     }
   };
 
-  useEffect(() => {
-    fetchNews(category, searchQuery);
-  }, [category, searchQuery]); //  
-
   return (
-    <NewsContext.Provider value={{ news, category, setCategory, searchQuery, setSearchQuery, fetchNews, loading, error }}>
-      {children}
-    </NewsContext.Provider>
+    <NewsContext.Provider value={{ category, setCategory, searchQuery, setSearchQuery }}>
+    {children}
+  </NewsContext.Provider>
   );
 }
 
