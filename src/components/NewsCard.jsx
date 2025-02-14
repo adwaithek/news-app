@@ -31,6 +31,7 @@ export default function NewsCard({ article }) {
       <Link href={`/article/${slug}`} className="text-blue-500 mt-2 inline-block" onClick={handleArticleClick}>
         Read More
       </Link>
+   
     </div>
   );
 }
